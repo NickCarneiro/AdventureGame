@@ -12,3 +12,7 @@ Prove your strength, dexterity, and wit as you embark on a quest through a medie
 
 # Mentor
 Nick Carneiro
+
+# Credit
+Based on Space Invaders code by Kevin Glass
+http://www.cokeandcode.com/info/tut2d.html
