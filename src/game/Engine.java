@@ -51,20 +51,22 @@ public class Engine extends Canvas {
 	/** True if we're holding up game play until a key has been pressed */
 	private boolean waitingForKeyPress = true;
 	/** True if the left cursor key is currently pressed */
-	private boolean leftPressed = false;
-	/** True if the right cursor key is currently pressed */
-	private boolean rightPressed = false;
-	/** True if we are firing */
-	private boolean spacePressed = false;
+	protected boolean leftPressed = false;
+	protected boolean rightPressed = false;
+	protected boolean upPressed = false;
+	protected boolean downPressed = false;
+	protected boolean spacePressed = false;
 	/** True if game logic needs to be applied this loop, normally as a result of a game event */
 	private boolean logicRequiredThisLoop = false;
+	
+	private Minigame minigame;
 	
 	/**
 	 * Construct our game and set it running.
 	 */
 	public Engine() {
 		// create a frame to contain our game
-		JFrame container = new JFrame("Adventure game project week");
+		JFrame container = new JFrame("The Orcs of Rehn");
 		
 		// get hold the content of the frame and set up the resolution of the game
 		JPanel panel = (JPanel) container.getContentPane();
@@ -122,6 +124,8 @@ public class Engine extends Canvas {
 		leftPressed = false;
 		rightPressed = false;
 		spacePressed = false;
+		upPressed = false;
+		downPressed = false;
 	}
 	
 	/**
@@ -154,6 +158,29 @@ public class Engine extends Canvas {
 		
 		// keep looping round til the game ends
 		while (gameRunning) {
+			
+			
+			
+			if(minigame != null){
+				minigame.logic();
+				if(minigame.complete == true){
+					if(minigame.result == true){
+						System.out.println("Minigame won!");
+					} else {
+						System.out.println("Minigame lost!");
+					}
+					
+					//exit minigame
+					minigame = null;
+					this.initEntities();
+					
+				}
+			} else if(spacePressed == true){
+				minigame = new RiddleGame(entities, removeList, this);
+				spacePressed = false;
+				minigame.setup();
+			}
+			
 			// work out how long its been since the last update, this
 			// will be used to calculate how far the entities should
 			// move this loop
@@ -272,6 +299,13 @@ public class Engine extends Canvas {
 			if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 				spacePressed = true;
 			}
+			if (e.getKeyCode() == KeyEvent.VK_UP) {
+				upPressed = true;
+			}
+			if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+				downPressed = true;
+			}
+			
 		} 
 		
 		/**
@@ -294,6 +328,12 @@ public class Engine extends Canvas {
 			}
 			if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 				spacePressed = false;
+			}
+			if (e.getKeyCode() == KeyEvent.VK_UP) {
+				upPressed = false;
+			}
+			if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+				downPressed = false;
 			}
 		}
 

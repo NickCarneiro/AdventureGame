@@ -1,5 +1,6 @@
 package game;
 
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
@@ -32,6 +33,8 @@ public abstract class Entity {
 	/** The rectangle used for other entities during collision resolution */
 	private Rectangle him = new Rectangle();
 	
+	private String text = "";
+	
 	/**
 	 * Construct a entity based on a sprite image and a location.
 	 * 
@@ -41,6 +44,12 @@ public abstract class Entity {
 	 */
 	public Entity(String ref,int x,int y) {
 		this.sprite = SpriteStore.get().getSprite(ref);
+		this.x = x;
+		this.y = y;
+	}
+	
+	public Entity(int x,int y, String text) {
+		this.text = text;
 		this.x = x;
 		this.y = y;
 	}
@@ -99,7 +108,17 @@ public abstract class Entity {
 	 * @param g The graphics context on which to draw
 	 */
 	public void draw(Graphics g) {
-		sprite.draw(g,(int) x,(int) y);
+		//draw a text entity or a sprite
+		if(sprite != null){
+			sprite.draw(g,(int) x,(int) y);
+		} else {
+			//draw text
+			Font font = new Font("Arial", Font.PLAIN, 30);
+			g.setFont(font);
+			g.drawChars(this.text.toCharArray(), 0, this.text.length(), (int)x, (int)y);
+			
+		}
+		
 	}
 	
 	/**
@@ -134,10 +153,17 @@ public abstract class Entity {
 	 * @return True if the entities collide with each other
 	 */
 	public boolean collidesWith(Entity other) {
-		me.setBounds((int) x,(int) y,sprite.getWidth(),sprite.getHeight());
-		him.setBounds((int) other.x,(int) other.y,other.sprite.getWidth(),other.sprite.getHeight());
-
-		return me.intersects(him);
+		if(sprite == null || other.sprite == null){
+			//text can't collide
+			return false;
+		} else {
+			
+		
+			me.setBounds((int) x,(int) y,sprite.getWidth(),sprite.getHeight());
+			him.setBounds((int) other.x,(int) other.y,other.sprite.getWidth(),other.sprite.getHeight());
+	
+			return me.intersects(him);
+		}
 	}
 	
 	/**
