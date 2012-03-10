@@ -35,6 +35,7 @@ import javax.swing.JPanel;
  * 
  */
 public class Engine extends Canvas {
+	ArrayList<Character> keybuffer;
 	private int width = 1024;
 	private int height = 768;
 	private FrameEntity frame;
@@ -56,6 +57,8 @@ public class Engine extends Canvas {
 	protected boolean upPressed = false;
 	protected boolean downPressed = false;
 	protected boolean spacePressed = false;
+	protected boolean enterPressed = false;
+	
 	/** True if game logic needs to be applied this loop, normally as a result of a game event */
 	private boolean logicRequiredThisLoop = false;
 	
@@ -109,6 +112,9 @@ public class Engine extends Canvas {
 		// initialise the entities in our game so there's something
 		// to see at startup
 		initEntities();
+		
+		//instantiate keybuffer
+		keybuffer = new ArrayList<Character>();
 	}
 	
 	/**
@@ -126,6 +132,8 @@ public class Engine extends Canvas {
 		spacePressed = false;
 		upPressed = false;
 		downPressed = false;
+		
+		
 	}
 	
 	/**
@@ -176,7 +184,7 @@ public class Engine extends Canvas {
 					
 				}
 			} else if(spacePressed == true){
-				minigame = new RiddleGame(entities, removeList, this);
+				minigame = new RLetterGame(entities, removeList, this);
 				spacePressed = false;
 				minigame.setup();
 			}
@@ -305,6 +313,14 @@ public class Engine extends Canvas {
 			if (e.getKeyCode() == KeyEvent.VK_DOWN) {
 				downPressed = true;
 			}
+			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+				enterPressed = true;
+			}
+			
+			
+			//add the key that was just pressed to our buffer
+			keybuffer.add(Character.toChars(e.getKeyCode())[0]);
+			
 			
 		} 
 		

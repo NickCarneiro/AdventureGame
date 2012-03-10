@@ -1,9 +1,14 @@
 package game;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+
 
 
 public class RiddleEntity extends Entity {
 	private Engine engine;
+	protected Color color;
 	/**
 	 * Create a new frame entity
 	 * 
@@ -12,15 +17,16 @@ public class RiddleEntity extends Entity {
 	 * @param x The intial x location of this alien
 	 * @param y The intial y location of this alient
 	 */
-	public RiddleEntity(Engine engine,String ref,int x,int y) {
-		super(ref,x,y);
-		
-		this.engine = engine;
-	}
 	
 	public RiddleEntity(Engine engine, int x, int y, String riddle_text){
 		super(x, y, riddle_text);
 		this.engine = engine;
+	}
+	
+	public RiddleEntity(Engine engine, int x, int y, String riddle_text, Color color){
+		super(x, y, riddle_text);
+		this.engine = engine;
+		this.color = color;
 	}
 	
 	/**
@@ -38,6 +44,21 @@ public class RiddleEntity extends Entity {
 		
 		// proceed with normal move
 		super.move(delta);
+	}
+	
+	@Override
+	public void draw(Graphics g){
+		//draw a text entity or a sprite
+		if(sprite != null){
+			sprite.draw(g,(int) x,(int) y);
+		} else {
+			//draw text
+			Font font = new Font("Arial", Font.PLAIN, 30);
+			g.setColor(this.color);
+			g.setFont(font);
+			g.drawChars(this.text.toCharArray(), 0, this.text.length(), (int)x, (int)y);
+			
+		}
 	}
 	
 	/**
